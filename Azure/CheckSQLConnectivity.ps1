@@ -239,7 +239,11 @@ $fails = $results | Where-Object { $_.Status -eq 'FAIL' }
 $warns = $results | Where-Object { $_.Status -eq 'WARN' }
 
 if ($fails.Count -eq 0) {
-    Write-Host "Overall: no hard failures detected. If the app is still failing to connect, the issue is likely at the SQL/auth layer (login, permissions, TLS/encryption settings, or connection string) rather than the network." -ForegroundColor Green
+    if ($warns.Count -gt 0) {
+        Write-Host "Overall: no hard failures detected, but $($warns.Count) warning(s) were reported. Review the checks above for any diagnostic context that may still matter." -ForegroundColor Yellow
+    } else {
+        Write-Host "Overall: no hard failures detected. If the app is still failing to connect, the issue is likely at the SQL/auth layer (login, permissions, TLS/encryption settings, or connection string) rather than the network." -ForegroundColor Green
+    }
 } else {
     Write-Host "Overall: $($fails.Count) check(s) FAILED. Start with the TCP port test result above - that's almost always the actionable one." -ForegroundColor Red
     Write-Host ""
