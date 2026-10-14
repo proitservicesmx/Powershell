@@ -1,3 +1,5 @@
 # Archivos de salida / datos exportados
 *.txt
 *.csv
+*.xls
+*.xlsx
